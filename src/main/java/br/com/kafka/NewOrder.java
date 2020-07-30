@@ -12,7 +12,11 @@ public class NewOrder {
         KafkaProducer producer = new KafkaProducer<String, String>(properties());
         String message = "CHAIR,2349";
         ProducerRecord record = new ProducerRecord<String, String>("STORE_NEW_ORDER", message, message);
-        producer.send(record, new Callback() {
+        producer.send(record, senderCallback()).get();
+    }
+
+    private static Callback senderCallback() {
+        return new Callback() {
             public void onCompletion(RecordMetadata data, Exception ex) {
                 if(ex != null){
                     ex.printStackTrace();
@@ -29,7 +33,7 @@ public class NewOrder {
                         "TIMESTAMP: " +
                         data.timestamp());
             }
-        }).get();
+        };
     }
 
     private static Properties properties() {
