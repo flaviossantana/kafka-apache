@@ -10,7 +10,6 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.config.ServerConfig.IP_PORT;
-import static br.com.kafka.config.TopicConfig.STORE_NEW_ORDER;
 
 public class ProducerService {
 
@@ -25,8 +24,8 @@ public class ProducerService {
     }
 
     public void send(String key, String value) throws InterruptedException, ExecutionException {
-        ProducerRecord orderRecord = new ProducerRecord(this.topic, key, value);
-        this.producer.send(orderRecord, this.producerCallback.sender()).get();
+        ProducerRecord record = new ProducerRecord(this.topic, key, value);
+        this.producer.send(record, this.producerCallback.sender()).get();
     }
 
     private Properties properties() {
