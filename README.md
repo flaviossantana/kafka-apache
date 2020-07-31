@@ -1,5 +1,5 @@
 # kafka-apache
-Teste de Integração com Apache Kafka
+Teste de Integração com Java / Apache Kafka
 
 - Iniciar Zookeeper:
 <br><i>.\bin\windows\zookeeper-server-start.bat config/zookeeper.properties</i> 
