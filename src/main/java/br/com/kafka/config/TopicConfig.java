@@ -6,4 +6,7 @@ public class TopicConfig {
     public static final String STORE_NEW_ORDER = "STORE_NEW_ORDER";
     public static final String STORE_SEND_EMAIL = "STORE_SEND_EMAIL";
 
+    private TopicConfig() {
+        super();
+    }
 }
