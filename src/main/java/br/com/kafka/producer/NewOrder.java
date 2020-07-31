@@ -14,13 +14,13 @@ public class NewOrder {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         NewOrder newOrder = new NewOrder();
-        ProducerService orderProducer = new ProducerService(STORE_NEW_ORDER, newOrder::senderCallback);
-        ProducerService emailProducer = new ProducerService(STORE_SEND_EMAIL, newOrder::senderCallback);
+        ProducerService purchase = new ProducerService(STORE_NEW_ORDER, newOrder::senderCallback);
+        ProducerService purchaseEmail = new ProducerService(STORE_SEND_EMAIL, newOrder::senderCallback);
 
         for(int i = 0; i <=  100; i++){
             String user = UUID.randomUUID().toString();
-            orderProducer.send(user, "USER: " + user + ", BIKE, R$: 4323.00");
-            emailProducer.send(user, "USER: " +user+ ". Thanks for your purchase!");
+            purchase.send(user, "USER: " + user + ", BIKE, R$: 4323.00");
+            purchaseEmail.send(user, "USER: " +user+ ". Thanks for your purchase!");
         }
     }
 
