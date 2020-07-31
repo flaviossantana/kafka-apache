@@ -1,4 +1,4 @@
-package br.com.kafka.service;
+package br.com.kafka.subscribe;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
