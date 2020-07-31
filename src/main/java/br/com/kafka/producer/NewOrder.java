@@ -1,23 +1,30 @@
-package br.com.kafka;
+package br.com.kafka.producer;
 
-import br.com.kafka.config.ServerConfig;
-import br.com.kafka.config.TopicConfig;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.config.ServerConfig.IP_PORT;
 import static br.com.kafka.config.TopicConfig.STORE_NEW_ORDER;
+import static br.com.kafka.config.TopicConfig.STORE_SEND_EMAIL;
 
 public class NewOrder {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         KafkaProducer producer = new KafkaProducer<String, String>(properties());
-        String message = "BIKE,4323";
-        ProducerRecord record = new ProducerRecord(STORE_NEW_ORDER, message, message);
-        producer.send(record, senderCallback()).get();
+
+        String product = "BIKE,4323,"+ new Date().getTime();
+        ProducerRecord orderRecord = new ProducerRecord(STORE_NEW_ORDER, product, product);
+        producer.send(orderRecord, senderCallback()).get();
+
+
+        String email = "Thanks for your purchase!";
+        ProducerRecord emailRecorder = new ProducerRecord(STORE_SEND_EMAIL, email, email);
+        producer.send(emailRecorder, senderCallback()).get();
+
     }
 
     private static Callback senderCallback() {
