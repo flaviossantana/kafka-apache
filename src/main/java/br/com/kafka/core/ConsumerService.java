@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import java.io.Closeable;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 
 import static br.com.kafka.config.ServerConfig.IP_PORT;
 
-public class ConsumerService {
+public class ConsumerService implements Closeable {
 
     private KafkaConsumer<String, String> consumer;
     private PrintRecorder printRecorder;
@@ -65,4 +66,8 @@ public class ConsumerService {
         }
     }
 
+    @Override
+    public void close() {
+        this.consumer.close();
+    }
 }

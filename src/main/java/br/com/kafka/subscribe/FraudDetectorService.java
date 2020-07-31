@@ -8,14 +8,15 @@ import static br.com.kafka.config.TopicConfig.STORE_NEW_ORDER;
 public class FraudDetectorService {
 
     public static void main(String[] args) {
-        FraudDetectorService fraudDetectorService = new FraudDetectorService();
 
-        ConsumerService consumerService = new ConsumerService(
+        FraudDetectorService fraudDetectorService = new FraudDetectorService();
+        try (ConsumerService consumerService = new ConsumerService(
                 STORE_NEW_ORDER,
                 FraudDetectorService.class,
-                fraudDetectorService::print);
+                fraudDetectorService::print)) {
+            consumerService.run();
+        }
 
-        consumerService.run();
     }
 
     public void print(ConsumerRecord<String, String> record) {

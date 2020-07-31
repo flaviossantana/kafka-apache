@@ -10,14 +10,15 @@ import static br.com.kafka.config.TopicConfig.STORE_ALL_TOPICS;
 public class LogService {
 
     public static void main(String[] args) {
-        LogService logService = new LogService();
 
-        ConsumerService consumerService = new ConsumerService(
+        LogService logService = new LogService();
+        try (ConsumerService consumerService = new ConsumerService(
                 Pattern.compile(STORE_ALL_TOPICS),
                 LogService.class,
-                logService::printLog);
+                logService::printLog)) {
+            consumerService.run();
+        }
 
-        consumerService.run();
     }
 
     private void printLog(ConsumerRecord<String, String> record) {

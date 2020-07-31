@@ -9,13 +9,12 @@ public class EmailService {
 
     public static void main(String[] args) {
         EmailService emailService = new EmailService();
-
-        ConsumerService consumerService = new ConsumerService(
+        try (ConsumerService consumerService = new ConsumerService(
                 STORE_SEND_EMAIL,
                 EmailService.class,
-                emailService::printEmail);
-
-        consumerService.run();
+                emailService::printEmail)) {
+            consumerService.run();
+        }
     }
 
     private void printEmail(ConsumerRecord<String, String> record) {

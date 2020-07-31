@@ -1,31 +1,29 @@
 package br.com.kafka.core;
 
-import br.com.kafka.behavior.ProducerCallback;
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.config.ServerConfig.IP_PORT;
 
-public class ProducerService {
+public class ProducerService implements Closeable {
 
-    private String topic;
     private KafkaProducer producer;
-    private ProducerCallback producerCallback;
 
-    public ProducerService(String topic, ProducerCallback producerCallback) {
-        this.topic = topic;
-        this.producerCallback = producerCallback;
+    public ProducerService() {
         this.producer = new KafkaProducer<String, String>(properties());
     }
 
-    public void send(String key, String value) throws InterruptedException, ExecutionException {
-        ProducerRecord record = new ProducerRecord(this.topic, key, value);
-        this.producer.send(record, this.producerCallback.sender()).get();
+    public void send(String topic, String key, String value) throws InterruptedException, ExecutionException {
+        ProducerRecord record = new ProducerRecord(topic, key, value);
+        this.producer.send(record, senderCallback()).get();
     }
 
     private Properties properties() {
@@ -36,4 +34,27 @@ public class ProducerService {
         return properties;
     }
 
+    private Callback senderCallback() {
+        return (data, ex) -> {
+            if(ex != null){
+                ex.printStackTrace();
+                return;
+            }
+            System.out.println(
+                    "SENT SUCCESSFULY: " +
+                            "TOPIC: " +
+                            data.topic() + " | " +
+                            "PARTITION: " +
+                            data.partition() +" | " +
+                            "OFFSET: " +
+                            data.offset() +" | "+
+                            "TIMESTAMP: " +
+                            data.timestamp());
+        };
+    }
+
+    @Override
+    public void close() {
+        this.producer.close();
+    }
 }
