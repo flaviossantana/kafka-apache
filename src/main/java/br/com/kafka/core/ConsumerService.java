@@ -34,8 +34,7 @@ public class ConsumerService implements Closeable {
 
     public void run(){
         while (true){
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
-            processorRecord(records);
+            processorRecord(consumer.poll(Duration.ofMillis(100)));
         }
     }
 
