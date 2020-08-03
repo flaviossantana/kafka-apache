@@ -37,4 +37,13 @@ public class Order {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

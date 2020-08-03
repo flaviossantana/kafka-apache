@@ -1,4 +1,4 @@
-package br.com.kafka.config;
+package br.com.kafka.constants;
 
 public class TopicConfig {
 

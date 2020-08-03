@@ -1,6 +1,6 @@
-package br.com.kafka.core;
+package br.com.kafka.client;
 
-import br.com.kafka.serializer.GsonSerializer;
+import br.com.kafka.serialization.GsonSerializer;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -11,13 +11,13 @@ import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-import static br.com.kafka.config.ServerConfig.IP_PORT;
+import static br.com.kafka.constants.ServerConfig.IP_PORT;
 
-public class ProducerService<T> implements Closeable {
+public class ProducerClient<T> implements Closeable {
 
     private KafkaProducer<String, T> producer;
 
-    public ProducerService() {
+    public ProducerClient() {
         this.producer = new KafkaProducer(properties());
     }
 

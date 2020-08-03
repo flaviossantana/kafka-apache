@@ -1,19 +1,20 @@
 package br.com.kafka.subscribe;
 
-import br.com.kafka.core.ConsumerService;
+import br.com.kafka.client.ConsumerClient;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import static br.com.kafka.config.TopicConfig.STORE_SEND_EMAIL;
+import static br.com.kafka.constants.TopicConfig.STORE_SEND_EMAIL;
 
 public class EmailService {
 
     public static void main(String[] args) {
         EmailService emailService = new EmailService();
-        try (ConsumerService consumerService = new ConsumerService(
+        try (ConsumerClient consumerClient = new ConsumerClient(
                 STORE_SEND_EMAIL,
                 EmailService.class,
-                emailService::printEmail)) {
-            consumerService.run();
+                emailService::printEmail,
+                String.class)) {
+            consumerClient.run();
         }
     }
 

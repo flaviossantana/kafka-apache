@@ -1,4 +1,4 @@
-package br.com.kafka.serializer;
+package br.com.kafka.serialization;
 
 import com.google.gson.Gson;
 import org.apache.kafka.common.serialization.Serializer;

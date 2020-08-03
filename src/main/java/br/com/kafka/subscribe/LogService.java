@@ -1,22 +1,23 @@
 package br.com.kafka.subscribe;
 
-import br.com.kafka.core.ConsumerService;
+import br.com.kafka.client.ConsumerClient;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.regex.Pattern;
 
-import static br.com.kafka.config.TopicConfig.STORE_ALL_TOPICS;
+import static br.com.kafka.constants.TopicConfig.STORE_ALL_TOPICS;
 
 public class LogService {
 
     public static void main(String[] args) {
 
         LogService logService = new LogService();
-        try (ConsumerService consumerService = new ConsumerService(
+        try (ConsumerClient<String> consumerClient = new ConsumerClient(
                 Pattern.compile(STORE_ALL_TOPICS),
                 LogService.class,
-                logService::printLog)) {
-            consumerService.run();
+                logService::printLog,
+                String.class)) {
+            consumerClient.run();
         }
 
     }
