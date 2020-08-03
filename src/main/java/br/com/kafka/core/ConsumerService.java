@@ -20,16 +20,19 @@ public class ConsumerService implements Closeable {
     private KafkaConsumer<String, String> consumer;
     private PrintRecorder printRecorder;
 
-    public ConsumerService(String topic, Class<?> aClass, PrintRecorder printRecorder) {
-        this.consumer = new KafkaConsumer(properties(aClass.getSimpleName()));
-        this.consumer.subscribe(Collections.singletonList(topic));
+    private ConsumerService(String groupId, PrintRecorder printRecorder) {
+        this.consumer = new KafkaConsumer(properties(groupId));
         this.printRecorder = printRecorder;
     }
 
+    public ConsumerService(String topic, Class<?> aClass, PrintRecorder printRecorder) {
+        this(aClass.getSimpleName(), printRecorder);
+        this.consumer.subscribe(Collections.singletonList(topic));
+    }
+
     public ConsumerService(Pattern pattern, Class<?> aClass, PrintRecorder printRecorder) {
-        this.consumer = new KafkaConsumer(properties(aClass.getSimpleName()));
+        this(aClass.getSimpleName(), printRecorder);
         this.consumer.subscribe(pattern);
-        this.printRecorder = printRecorder;
     }
 
     public void run(){
