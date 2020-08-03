@@ -1,5 +1,6 @@
 package br.com.kafka.core;
 
+import br.com.kafka.serializer.GsonSerializer;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -12,15 +13,15 @@ import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.config.ServerConfig.IP_PORT;
 
-public class ProducerService implements Closeable {
+public class ProducerService<T> implements Closeable {
 
-    private KafkaProducer producer;
+    private KafkaProducer<String, T> producer;
 
     public ProducerService() {
-        this.producer = new KafkaProducer<String, String>(properties());
+        this.producer = new KafkaProducer(properties());
     }
 
-    public void send(String topic, String key, String value) throws InterruptedException, ExecutionException {
+    public void send(String topic, String key, T value) throws InterruptedException, ExecutionException {
         ProducerRecord record = new ProducerRecord(topic, key, value);
         this.producer.send(record, senderCallback()).get();
     }
@@ -29,7 +30,7 @@ public class ProducerService implements Closeable {
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, IP_PORT);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, GsonSerializer.class.getName());
         return properties;
     }
 
