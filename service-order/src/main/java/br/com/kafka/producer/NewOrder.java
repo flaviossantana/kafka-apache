@@ -1,6 +1,6 @@
 package br.com.kafka.producer;
 
-import br.com.kafka.bean.Order;
+import br.com.kafka.dto.Order;
 import br.com.kafka.client.ProducerClient;
 
 import java.math.BigDecimal;
