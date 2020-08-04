@@ -9,7 +9,7 @@ public class EmailService {
 
     public static void main(String[] args) {
         EmailService emailService = new EmailService();
-        try (ConsumerClient consumerClient = new ConsumerClient(
+        try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_SEND_EMAIL,
                 EmailService.class,
                 emailService::printEmail,
