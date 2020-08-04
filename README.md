@@ -10,6 +10,9 @@ Teste de Integração com Java / Apache Kafka
 - Criando Tópico:
 <br><i> .\bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic NOME_TOPICO</i>
 
+- Listando Tópicos
+<br><i> .\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092</i>  
+
 - Alterando Tópico (Partitions):
 <br><i> .\bin\windows\kafka-topics.bat --alter --zookeeper localhost:2181 --topic NOME_TOPICO --partitions 3</i>
 
