@@ -11,7 +11,7 @@ public class FraudDetectorService {
     public static void main(String[] args) {
 
         FraudDetectorService fraudDetectorService = new FraudDetectorService();
-        try (ConsumerClient<Order> consumerClient = new ConsumerClient(
+        try (ConsumerClient<Order> consumerClient = new ConsumerClient<>(
                 STORE_NEW_ORDER,
                 FraudDetectorService.class,
                 fraudDetectorService::print,

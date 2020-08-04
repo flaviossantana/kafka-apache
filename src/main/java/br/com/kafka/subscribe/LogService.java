@@ -1,34 +1,42 @@
 package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.serialization.StringDeserializer;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import static br.com.kafka.constants.TopicConfig.STORE_ALL_TOPICS;
+import static java.lang.System.out;
 
 public class LogService {
 
     public static void main(String[] args) {
 
         LogService logService = new LogService();
-        try (ConsumerClient<String> consumerClient = new ConsumerClient(
+
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+
+        try (ConsumerClient<String> consumerClient = new ConsumerClient<>(
                 Pattern.compile(STORE_ALL_TOPICS),
                 LogService.class,
                 logService::printLog,
-                String.class)) {
+                String.class,
+                properties)) {
             consumerClient.run();
         }
-
     }
 
     private void printLog(ConsumerRecord<String, String> record) {
-        System.out.println("----------------------------------------------------");
-        System.out.println("LOGGING STORE TOPICS");
-        System.out.println(record.key());
-        System.out.println(record.value());
-        System.out.println(record.offset());
-        System.out.println(record.partition());
+        out.println("----------------------------------------------------");
+        out.println("LOGGING STORE TOPICS");
+        out.println(record.key());
+        out.println(record.value());
+        out.println(record.offset());
+        out.println(record.partition());
     }
 
 }

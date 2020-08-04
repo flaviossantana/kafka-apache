@@ -11,6 +11,8 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import java.io.Closeable;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -21,20 +23,22 @@ public class ConsumerClient<T> implements Closeable {
     private Class<T> type;
     private PrintRecorder printRecorder;
     private KafkaConsumer<String, T> consumer;
+    private Map<String, String> mapProperties;
 
-    private ConsumerClient(String groupId, PrintRecorder printRecorder, Class<T> type) {
+    private ConsumerClient(String groupId, PrintRecorder printRecorder, Class<T> type, Map<String, String> mapProperties) {
         this.type = type;
+        this.mapProperties = mapProperties;
         this.consumer = new KafkaConsumer(properties(groupId));
         this.printRecorder = printRecorder;
     }
 
     public ConsumerClient(String topic, Class<?> aClass, PrintRecorder printRecorder, Class<T> type) {
-        this(aClass.getSimpleName(), printRecorder,type);
+        this(aClass.getSimpleName(), printRecorder,type, new HashMap<>());
         this.consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public ConsumerClient(Pattern pattern, Class<?> aClass, PrintRecorder printRecorder, Class<T> type) {
-        this(aClass.getSimpleName(), printRecorder, type);
+    public ConsumerClient(Pattern pattern, Class<?> aClass, PrintRecorder printRecorder, Class<T> type, Map<String, String> mapProperties) {
+        this(aClass.getSimpleName(), printRecorder, type, mapProperties);
         this.consumer.subscribe(pattern);
     }
 
@@ -52,6 +56,7 @@ public class ConsumerClient<T> implements Closeable {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupIdConfig);
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
         properties.setProperty(GsonDeserializer.TYPE_CONFIG, this.type.getName());
+        properties.putAll(this.mapProperties);
         return properties;
     }
 
