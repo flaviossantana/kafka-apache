@@ -1,6 +1,6 @@
 package br.com.kafka.client;
 
-import br.com.kafka.behavior.PrintRecorder;
+import br.com.kafka.behavior.ReadRecorder;
 import br.com.kafka.serialization.GsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -21,24 +21,24 @@ import static br.com.kafka.constants.ServerConfig.IP_PORT;
 public class ConsumerClient<T> implements Closeable {
 
     private Class<T> type;
-    private PrintRecorder printRecorder;
+    private ReadRecorder readRecorder;
     private KafkaConsumer<String, T> consumer;
     private Map<String, String> mapProperties;
 
-    private ConsumerClient(String groupId, PrintRecorder printRecorder, Class<T> type, Map<String, String> mapProperties) {
+    private ConsumerClient(String groupId, ReadRecorder readRecorder, Class<T> type, Map<String, String> mapProperties) {
         this.type = type;
         this.mapProperties = mapProperties;
         this.consumer = new KafkaConsumer(properties(groupId));
-        this.printRecorder = printRecorder;
+        this.readRecorder = readRecorder;
     }
 
-    public ConsumerClient(String topic, Class<?> aClass, PrintRecorder printRecorder, Class<T> type) {
-        this(aClass.getSimpleName(), printRecorder,type, new HashMap<>());
+    public ConsumerClient(String topic, Class<?> aClass, ReadRecorder readRecorder, Class<T> type) {
+        this(aClass.getSimpleName(), readRecorder,type, new HashMap<>());
         this.consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public ConsumerClient(Pattern pattern, Class<?> aClass, PrintRecorder printRecorder, Class<T> type, Map<String, String> mapProperties) {
-        this(aClass.getSimpleName(), printRecorder, type, mapProperties);
+    public ConsumerClient(Pattern pattern, Class<?> aClass, ReadRecorder readRecorder, Class<T> type, Map<String, String> mapProperties) {
+        this(aClass.getSimpleName(), readRecorder, type, mapProperties);
         this.consumer.subscribe(pattern);
     }
 
@@ -63,7 +63,7 @@ public class ConsumerClient<T> implements Closeable {
     private void processorRecord(ConsumerRecords<String, T> records) {
         if (!records.isEmpty()) {
             for (ConsumerRecord<String, T> record : records) {
-                this.printRecorder.print(record);
+                this.readRecorder.consumeRecorder(record);
                 sleep();
             }
         }
