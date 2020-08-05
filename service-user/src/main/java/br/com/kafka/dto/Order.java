@@ -15,7 +15,7 @@ public class Order {
     }
 
     public String getEmail() {
-        return "e@ma.il";
+        return "b@ma.il";
     }
 
     @Override

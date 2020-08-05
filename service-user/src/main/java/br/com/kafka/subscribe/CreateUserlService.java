@@ -25,23 +25,26 @@ public class CreateUserlService {
                 STORE_NEW_ORDER,
                 CreateUserlService.class,
                 createUserService::consumeOrder,
-                String.class)) {
+                Order.class)) {
             consumerClient.run();
         }
     }
 
     private void consumeOrder(ConsumerRecord<String, Order> record) {
 
-        System.out.println("----------------------------------------------------");
-        System.out.println("SEND EMAIL FOR NEW ORDER");
-        System.out.println(record.key());
-        System.out.println(record.value());
-        System.out.println(record.offset());
-        System.out.println(record.partition());
+
         try {
             Order order = record.value();
             if (isNewuser(order.getEmail())) {
                 createUser(order.getEmail());
+
+                System.out.println("----------------------------------------------------");
+                System.out.println("CREATING A NEW USER: " + order.getEmail());
+                System.out.println(record.key());
+                System.out.println(record.value());
+                System.out.println(record.offset());
+                System.out.println(record.partition());
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,7 +62,7 @@ public class CreateUserlService {
         PreparedStatement exists = this.connection.prepareStatement(SELECT_TB_USERS_BY_EMAIL);
         exists.setString(1, email);
         ResultSet result = exists.executeQuery();
-        return result.next();
+        return !result.next();
     }
 
 }
