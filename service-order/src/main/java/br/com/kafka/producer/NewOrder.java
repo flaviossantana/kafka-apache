@@ -26,7 +26,7 @@ public class NewOrder {
                     Order order = new Order(orderId, userId, email, amount);
 
                     orderProducer.send(STORE_NEW_ORDER, userId, order);
-                    emailProducer.send(STORE_SEND_EMAIL, userId, "USER: " + userId + ". Thanks for your purchase!");
+                    emailProducer.send(STORE_SEND_EMAIL, userId, "USER: " + email + ". Thanks for your purchase!");
                 }
             }
         }
