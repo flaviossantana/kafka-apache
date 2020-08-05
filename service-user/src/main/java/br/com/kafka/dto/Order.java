@@ -6,16 +6,22 @@ public class Order {
 
     private String id;
     private String userId;
+    private String email;
     private BigDecimal amount;
 
-    public Order(String id, String userId, BigDecimal amount) {
+    public Order(String id, String userId, BigDecimal amount, String email) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
+        this.email = email;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getEmail() {
-        return "b@ma.il";
+        return this.email;
     }
 
     @Override

@@ -1,7 +1,8 @@
 package br.com.kafka.producer;
 
-import br.com.kafka.dto.Order;
 import br.com.kafka.client.ProducerClient;
+import br.com.kafka.data.GenereteData;
+import br.com.kafka.dto.Order;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -20,8 +21,9 @@ public class NewOrder {
                     String orderId = UUID.randomUUID().toString();
                     String userId = UUID.randomUUID().toString();
                     BigDecimal amount = BigDecimal.valueOf(Math.random() * 5000 + 1);
+                    String email = GenereteData.email();
 
-                    Order order = new Order(orderId, userId, amount);
+                    Order order = new Order(orderId, userId, email, amount);
 
                     orderProducer.send(STORE_NEW_ORDER, userId, order);
                     emailProducer.send(STORE_SEND_EMAIL, userId, "USER: " + userId + ". Thanks for your purchase!");
@@ -29,4 +31,7 @@ public class NewOrder {
             }
         }
     }
+
+
+
 }

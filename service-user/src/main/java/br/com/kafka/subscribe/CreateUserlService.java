@@ -5,7 +5,6 @@ import br.com.kafka.dto.Order;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.*;
-import java.util.UUID;
 
 import static br.com.kafka.constants.DBConfig.*;
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
@@ -36,7 +35,7 @@ public class CreateUserlService {
         try {
             Order order = record.value();
             if (isNewuser(order.getEmail())) {
-                createUser(order.getEmail());
+                createUser(order.getUserId(), order.getEmail());
 
                 System.out.println("----------------------------------------------------");
                 System.out.println("CREATING A NEW USER: " + order.getEmail());
@@ -51,9 +50,9 @@ public class CreateUserlService {
         }
     }
 
-    private void createUser(String email) throws SQLException {
+    private void createUser(String uuid, String email) throws SQLException {
         PreparedStatement insert = this.connection.prepareStatement(INSERT_TB_USERS);
-        insert.setString(1, UUID.randomUUID().toString());
+        insert.setString(1, uuid);
         insert.setString(2, email);
         insert.execute();
     }
