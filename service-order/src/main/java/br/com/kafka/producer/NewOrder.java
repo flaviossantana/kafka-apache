@@ -16,11 +16,11 @@ public class NewOrder {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         try (ProducerClient orderProducer = new ProducerClient<Order>()) {
             try (ProducerClient emailProducer = new ProducerClient<String>()) {
+                String email = GenereteData.email();
                 for (int i = 0; i <= 10; i++) {
 
                     String orderId = UUID.randomUUID().toString();
                     BigDecimal amount = BigDecimal.valueOf(Math.random() * 5000 + 1);
-                    String email = GenereteData.email();
 
                     Order order = new Order(orderId, email, amount);
 
