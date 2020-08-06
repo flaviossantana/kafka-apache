@@ -33,7 +33,7 @@ public class LogService {
     private void printLog(ConsumerRecord<String, String> record) {
         out.println("----------------------------------------------------");
         out.println("LOGGING: " +  record.topic());
-        out.println(record.key());
+        out.println("KEY: " + record.key());
         out.println(record.value());
         out.println(record.offset());
         out.println(record.partition());

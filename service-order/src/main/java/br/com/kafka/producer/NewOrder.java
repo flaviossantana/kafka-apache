@@ -19,14 +19,13 @@ public class NewOrder {
                 for (int i = 0; i <= 10; i++) {
 
                     String orderId = UUID.randomUUID().toString();
-                    String userId = UUID.randomUUID().toString();
                     BigDecimal amount = BigDecimal.valueOf(Math.random() * 5000 + 1);
                     String email = GenereteData.email();
 
-                    Order order = new Order(orderId, userId, email, amount);
+                    Order order = new Order(orderId, email, amount);
 
-                    orderProducer.send(STORE_NEW_ORDER, userId, order);
-                    emailProducer.send(STORE_SEND_EMAIL, userId, "USER: " + email + ". Thanks for your purchase!");
+                    orderProducer.send(STORE_NEW_ORDER, email, order);
+                    emailProducer.send(STORE_SEND_EMAIL, email, "USER: " + email + ". Thanks for your purchase!");
                 }
             }
         }

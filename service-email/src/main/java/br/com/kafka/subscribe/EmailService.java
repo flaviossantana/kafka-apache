@@ -21,7 +21,7 @@ public class EmailService {
     private void printEmail(ConsumerRecord<String, String> record) {
         System.out.println("----------------------------------------------------");
         System.out.println("SEND EMAIL FOR NEW ORDER");
-        System.out.println(record.key());
+        System.out.println("KEY:" + record.key());
         System.out.println(record.value());
         System.out.println(record.offset());
         System.out.println(record.partition());

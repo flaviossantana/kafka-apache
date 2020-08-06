@@ -35,13 +35,13 @@ public class FraudDetectorService {
             Order order = record.value();
             if (isRejected(order)) {
                 System.out.println("PROCESSING ORDER REJECTED");
-                emailProducer.send(TopicConfig.STORE_ORDER_REJECTED, order.getUserId(), order);
+                emailProducer.send(TopicConfig.STORE_ORDER_REJECTED, order.getEmail(), order);
             } else {
                 System.out.println("PROCESSING ORDER APROVED");
-                emailProducer.send(TopicConfig.STORE_ORDER_APPROVED, order.getUserId(), order);
+                emailProducer.send(TopicConfig.STORE_ORDER_APPROVED, order.getEmail(), order);
             }
 
-            System.out.println(record.key());
+            System.out.println("KEY: " + record.key());
             System.out.println(record.value());
             System.out.println(record.offset());
             System.out.println(record.partition());
