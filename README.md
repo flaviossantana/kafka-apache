@@ -24,3 +24,6 @@ Teste de Integração com Java / Apache Kafka
     |FraudDetectorService |STORE_NEW_ORDER |1          |511             |1029            |518             |-               |-               |-        | 
     |FraudDetectorService |STORE_NEW_ORDER |2          |795             |1095            |300             |-               |-               |-        | 
     |FraudDetectorService |STORE_NEW_ORDER |0          |812             |1153            |341             |-               |-               |-        |
+
+- Enviandio um Novo Pedido de Compra:
+<br><i>http://localhost:8080/store/new?email=user@mail.com&amount=1659.98</i>
