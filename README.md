@@ -13,6 +13,9 @@ Teste de Integração com Java / Apache Kafka
 - Listando Tópicos
 <br><i> .\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092</i>  
 
+- Descrever Tópicos
+<br><i> .\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic NOME_TPIC</i>
+
 - Alterando Tópico (Partitions):
 <br><i> .\bin\windows\kafka-topics.bat --alter --zookeeper localhost:2181 --topic NOME_TOPICO --partitions 3</i>
 
@@ -23,7 +26,7 @@ Teste de Integração com Java / Apache Kafka
     | ------------------- | -------------- | --------- | -------------- | -------------- | -------------- | -------------- | -------------- | ------- |
     |FraudDetectorService |STORE_NEW_ORDER |1          |511             |1029            |518             |-               |-               |-        | 
     |FraudDetectorService |STORE_NEW_ORDER |2          |795             |1095            |300             |-               |-               |-        | 
-    |FraudDetectorService |STORE_NEW_ORDER |0          |812             |1153            |341             |-               |-               |-        |
+    |FraudDetectbiorService |STORE_NEW_ORDER |0          |812             |1153            |341             |-               |-               |-        |
 
 - Enviandio um Novo Pedido de Compra:
 <br><i>http://localhost:8080/store/new?email=user@mail.com&amount=1659.98</i>
