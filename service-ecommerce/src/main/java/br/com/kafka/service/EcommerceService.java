@@ -14,7 +14,7 @@ public class EcommerceService {
 
         ServletContextHandler context = new ServletContextHandler();
         context.setContextPath(PATH_CONTEXT);
-        context.addServlet(new ServletHolder(new NewOrderServlet()), PATH_NEW_ORDER);
+        context.addServlet(new ServletHolder(new NewOrderServlet()), PATH_SEND_REPORT);
 
         server.setHandler(context);
         server.start();
