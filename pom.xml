@@ -16,6 +16,7 @@
         <module>service-log</module>
         <module>service-user</module>
         <module>service-ecommerce</module>
+        <module>service-report</module>
     </modules>
 
     <dependencies>
