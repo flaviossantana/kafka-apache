@@ -28,8 +28,8 @@ public class SendReportServlet extends HttpServlet {
 
             batchProducer.send(STORE_SEND_MESSAGE_TO_ALL_USERS, STORE_REPORT_USER,STORE_REPORT_USER);
 
-            resp.getWriter().print("FOI..");
             resp.setStatus(HttpStatus.OK_200);
+            resp.getWriter().print("Generating all reports");
 
         } catch (Exception e) {
             throw new ServletException(e);

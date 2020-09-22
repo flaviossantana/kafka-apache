@@ -7,19 +7,20 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static br.com.kafka.constants.TopicConfig.STORE_REPORT_USER;
 
 public class ReportService {
 
-    private static final String PATH = IO.getResourcePath("report_user.txt");
+    private static final InputStream IN = IO.getResourceAsStream("report_user.txt");
 
     public static void main(String[] args) {
-        ReportService reportService = new ReportService();
+        ReportService emailService = new ReportService();
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_REPORT_USER,
                 ReportService.class,
-                reportService::print,
+                emailService::print,
                 User.class)) {
             consumerClient.run();
         }
@@ -32,7 +33,7 @@ public class ReportService {
 
             User user = record.value();
             File target = IO.newResourceFile(user.getReportName());
-            IO.copyTo(PATH, target);
+            IO.copyTo(IN, target);
             IO.append(target, "Created for: " + user.getUuid());
 
         } catch (IOException e) {
