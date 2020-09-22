@@ -15,11 +15,11 @@ public class ReportService {
     private static final String PATH = IO.getResourcePath("report_user.txt");
 
     public static void main(String[] args) {
-        ReportService emailService = new ReportService();
+        ReportService reportService = new ReportService();
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_REPORT_USER,
                 ReportService.class,
-                emailService::print,
+                reportService::print,
                 User.class)) {
             consumerClient.run();
         }

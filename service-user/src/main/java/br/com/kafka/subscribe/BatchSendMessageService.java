@@ -2,12 +2,10 @@ package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
 import br.com.kafka.client.ProducerClient;
-import br.com.kafka.dto.Order;
 import br.com.kafka.dto.User;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
