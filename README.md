@@ -30,3 +30,11 @@ Teste de Integração com Java / Apache Kafka
 
 - Enviandio um Novo Pedido de Compra:
 <br><i>http://localhost:8080/store/new?email=user@mail.com&amount=1659.98</i>
+
+### Desenvolvimento
+
+ - criando um novo serviço que faz IO
+ - consideramos o acesso a disco como serviço externo
+ - diversas formas de trabalhar batch
+ - usando o batch com http fast delegate
+ - usando um processo assíncrono e mantendo o isolamento do banco de usuários
