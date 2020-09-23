@@ -1,5 +1,7 @@
 package br.com.kafka.client;
 
+import br.com.kafka.dto.CorrelationId;
+import br.com.kafka.dto.Message;
 import br.com.kafka.serialization.GsonSerializer;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -15,13 +17,14 @@ import static br.com.kafka.constants.ServerConfig.IP_PORT;
 
 public class ProducerClient<T> implements Closeable {
 
-    private KafkaProducer<String, T> producer;
+    private KafkaProducer<String, Message<T>> producer;
 
     public ProducerClient() {
         this.producer = new KafkaProducer(properties());
     }
 
-    public void send(String topic, String key, T value) throws InterruptedException, ExecutionException {
+    public void send(String topic, String key, T payload) throws InterruptedException, ExecutionException {
+        Message<T> value = new Message<>(new CorrelationId(), payload);
         ProducerRecord record = new ProducerRecord(topic, key, value);
         this.producer.send(record, senderCallback()).get();
     }
