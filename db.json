@@ -201,6 +201,7 @@
       "longitude": -55.42
     },
     {
+      "id": 52,
       "codigo_uf": 52,
       "uf": "GO",
       "nome": "Goiás",
@@ -208,6 +209,7 @@
       "longitude": -49.86
     },
     {
+      "id": 53,
       "codigo_uf": 53,
       "uf": "DF",
       "nome": "Distrito Federal",
