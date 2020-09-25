@@ -38,3 +38,6 @@ Teste de Integração com Java / Apache Kafka
  - diversas formas de trabalhar batch
  - usando o batch com http fast delegate
  - usando um processo assíncrono e mantendo o isolamento do banco de usuários
+ - a importância de um correlation id
+ - serialização e deserialização customizada em sua própria camada
+ - wrapping de mensagens com tipo próprio 
