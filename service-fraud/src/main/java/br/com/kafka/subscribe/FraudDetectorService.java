@@ -2,6 +2,8 @@ package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ProducerClient;
 import br.com.kafka.constants.TopicConfig;
+import br.com.kafka.dto.CorrelationId;
+import br.com.kafka.dto.Message;
 import br.com.kafka.dto.Order;
 import br.com.kafka.client.ConsumerClient;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -28,17 +30,27 @@ public class FraudDetectorService {
 
     }
 
-    private void print(ConsumerRecord<String, Order> record) {
+    private void print(ConsumerRecord<String, Message<Order>> record) {
         try {
             System.out.println("----------------------------------------------------");
 
-            Order order = record.value();
+            Message<Order> message = record.value();
+            Order order = message.getPayload();
+
             if (isRejected(order)) {
                 System.out.println("PROCESSING ORDER REJECTED");
-                emailProducer.send(TopicConfig.STORE_ORDER_REJECTED, order.getEmail(), order);
+                emailProducer.send(
+                        new CorrelationId(FraudDetectorService.class.getSimpleName()),
+                        TopicConfig.STORE_ORDER_REJECTED,
+                        order.getEmail(),
+                        order);
             } else {
                 System.out.println("PROCESSING ORDER APROVED");
-                emailProducer.send(TopicConfig.STORE_ORDER_APPROVED, order.getEmail(), order);
+                emailProducer.send(
+                        new CorrelationId(FraudDetectorService.class.getSimpleName()),
+                        TopicConfig.STORE_ORDER_APPROVED,
+                        order.getEmail(),
+                        order);
             }
 
             System.out.println("KEY: " + record.key());

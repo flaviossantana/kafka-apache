@@ -1,6 +1,7 @@
 package br.com.kafka.servlet;
 
 import br.com.kafka.client.ProducerClient;
+import br.com.kafka.dto.CorrelationId;
 import br.com.kafka.dto.Order;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -37,8 +38,15 @@ public class NewOrderServlet extends HttpServlet {
 
             String msg = "Thanks " + email + ", for your purchase!";
 
-            orderProducer.send(STORE_NEW_ORDER, email, order);
-            emailProducer.send(STORE_SEND_EMAIL, email, msg);
+            orderProducer.send(
+                    new CorrelationId(NewOrderServlet.class.getSimpleName()),
+                    STORE_NEW_ORDER, email, order);
+
+            emailProducer.send(
+                    new CorrelationId(NewOrderServlet.class.getSimpleName()),
+                    STORE_SEND_EMAIL,
+                    email,
+                    msg);
 
             resp.getWriter().print(msg);
             resp.setStatus(HttpStatus.OK_200);

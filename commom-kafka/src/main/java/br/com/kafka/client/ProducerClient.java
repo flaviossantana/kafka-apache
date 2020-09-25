@@ -23,8 +23,8 @@ public class ProducerClient<T> implements Closeable {
         this.producer = new KafkaProducer(properties());
     }
 
-    public void send(String topic, String key, T payload) throws InterruptedException, ExecutionException {
-        Message<T> value = new Message<>(new CorrelationId(), payload);
+    public void send(CorrelationId correlationId, String topic, String key, T payload) throws InterruptedException, ExecutionException {
+        Message<T> value = new Message<>(correlationId, payload);
         ProducerRecord record = new ProducerRecord(topic, key, value);
         this.producer.send(record, senderCallback()).get();
     }

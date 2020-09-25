@@ -1,6 +1,7 @@
 package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
+import br.com.kafka.dto.Message;
 import br.com.kafka.dto.Order;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -30,11 +31,14 @@ public class CreateUserlService {
         }
     }
 
-    private void consumeOrder(ConsumerRecord<String, Order> record) {
+    private void consumeOrder(ConsumerRecord<String, Message<Order>> record) {
 
 
         try {
-            Order order = record.value();
+
+            Message<Order> message = record.value();
+            Order order = message.getPayload();
+
             if (isNewuser(order.getEmail())) {
                 createUser(order.getEmail());
 

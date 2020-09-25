@@ -6,14 +6,18 @@ public class CorrelationId {
 
     private final String id;
 
-    public CorrelationId() {
-        this.id = UUID.randomUUID().toString();
+    public CorrelationId(String className) {
+        this.id = className +"("+UUID.randomUUID().toString() + ")";
     }
 
     @Override
     public String toString() {
-        return "Correlation{" +
+        return "CorrelationId{" +
                 "id='" + id + '\'' +
                 '}';
+    }
+
+    public CorrelationId addParent(String className) {
+        return new CorrelationId(id +"|"+ className);
     }
 }

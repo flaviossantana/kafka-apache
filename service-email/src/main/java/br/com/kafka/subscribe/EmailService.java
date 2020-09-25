@@ -1,6 +1,7 @@
 package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
+import br.com.kafka.dto.Message;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import static br.com.kafka.constants.TopicConfig.STORE_SEND_EMAIL;
@@ -18,7 +19,7 @@ public class EmailService {
         }
     }
 
-    private void printEmail(ConsumerRecord<String, String> record) {
+    private void printEmail(ConsumerRecord<String, Message<String>> record) {
         System.out.println("----------------------------------------------------");
         System.out.println("SEND EMAIL FOR NEW ORDER");
         System.out.println("KEY:" + record.key());

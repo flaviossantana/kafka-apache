@@ -2,6 +2,7 @@ package br.com.kafka.producer;
 
 import br.com.kafka.client.ProducerClient;
 import br.com.kafka.data.GenereteData;
+import br.com.kafka.dto.CorrelationId;
 import br.com.kafka.dto.Order;
 
 import java.math.BigDecimal;
@@ -25,8 +26,17 @@ public class NewOrder {
 
                     Order order = new Order(orderId, email, amount);
 
-                    orderProducer.send(STORE_NEW_ORDER, email, order);
-                    emailProducer.send(STORE_SEND_EMAIL, email, "USER: " + email + ". Thanks for your purchase!");
+                    orderProducer.send(
+                            new CorrelationId(NewOrder.class.getSimpleName()),
+                            STORE_NEW_ORDER,
+                            email,
+                            order);
+
+                    emailProducer.send(
+                            new CorrelationId(NewOrder.class.getSimpleName()),
+                            STORE_SEND_EMAIL,
+                            email,
+                            "USER: " + email + ". Thanks for your purchase!");
                 }
             }
         }

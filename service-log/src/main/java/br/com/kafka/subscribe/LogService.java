@@ -1,6 +1,7 @@
 package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
+import br.com.kafka.dto.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -30,13 +31,11 @@ public class LogService {
         }
     }
 
-    private void printLog(ConsumerRecord<String, String> record) {
+    private void printLog(ConsumerRecord<String, Message<String>> record) {
         out.println("----------------------------------------------------");
         out.println("LOGGING: " +  record.topic());
         out.println("KEY: " + record.key());
         out.println(record.value());
-        out.println(record.offset());
-        out.println(record.partition());
     }
 
 }
