@@ -41,3 +41,6 @@ Teste de Integração com Java / Apache Kafka
  - a importância de um correlation id
  - serialização e deserialização customizada em sua própria camada
  - wrapping de mensagens com tipo próprio 
+ - como implementar um correlation id
+ - a importância da mensagem como wrapper ou headers
+ - como manter o histórico de mensagens que geraram uma determinada mensagem
