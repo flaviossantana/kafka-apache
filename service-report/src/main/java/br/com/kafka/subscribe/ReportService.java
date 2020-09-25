@@ -2,6 +2,7 @@ package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
 import br.com.kafka.core.IO;
+import br.com.kafka.dto.Message;
 import br.com.kafka.dto.User;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -26,12 +27,13 @@ public class ReportService {
         }
     }
 
-    private void print(ConsumerRecord<String, User> record) {
+    private void print(ConsumerRecord<String, Message<User>> record) {
         try {
             System.out.println("---------------------------------------------------");
-            System.out.println("PROCESSING REPORT FOR: " + record.value().getUuid());
+            System.out.println("PROCESSING REPORT FOR: " + record.value().getPayload().getUuid());
 
-            User user = record.value();
+            Message<User> message = record.value();
+            User user = message.getPayload();
             File target = IO.newResourceFile(user.getReportName());
             IO.copyTo(IN, target);
             IO.append(target, "Created for: " + user.getUuid());

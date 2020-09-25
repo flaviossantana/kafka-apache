@@ -1,6 +1,7 @@
 package br.com.kafka.client;
 
 import br.com.kafka.behavior.ReadRecorder;
+import br.com.kafka.dto.Message;
 import br.com.kafka.serialization.GsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -22,7 +23,7 @@ public class ConsumerClient<T> implements Closeable {
 
     private Class<T> type;
     private ReadRecorder readRecorder;
-    private KafkaConsumer<String, T> consumer;
+    private KafkaConsumer<String, Message<T>> consumer;
     private Map<String, String> mapProperties;
 
     private ConsumerClient(String groupId, ReadRecorder readRecorder, Class<T> type, Map<String, String> mapProperties) {
@@ -32,12 +33,12 @@ public class ConsumerClient<T> implements Closeable {
         this.readRecorder = readRecorder;
     }
 
-    public ConsumerClient(String topic, Class<?> aClass, ReadRecorder readRecorder, Class<T> type) {
+    public ConsumerClient(String topic, Class<?> aClass, ReadRecorder<T> readRecorder, Class<T> type) {
         this(aClass.getSimpleName(), readRecorder,type, new HashMap<>());
         this.consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public ConsumerClient(Pattern pattern, Class<?> aClass, ReadRecorder readRecorder, Class<T> type, Map<String, String> mapProperties) {
+    public ConsumerClient(Pattern pattern, Class<?> aClass, ReadRecorder<T> readRecorder, Class<T> type, Map<String, String> mapProperties) {
         this(aClass.getSimpleName(), readRecorder, type, mapProperties);
         this.consumer.subscribe(pattern);
     }
@@ -55,14 +56,13 @@ public class ConsumerClient<T> implements Closeable {
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, GsonDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupIdConfig);
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
-        properties.setProperty(GsonDeserializer.TYPE_CONFIG, this.type.getName());
         properties.putAll(this.mapProperties);
         return properties;
     }
 
-    private void processorRecord(ConsumerRecords<String, T> records) {
+    private void processorRecord(ConsumerRecords<String, Message<T>> records) {
         if (!records.isEmpty()) {
-            for (ConsumerRecord<String, T> record : records) {
+            for (ConsumerRecord<String, Message<T>> record : records) {
                 this.readRecorder.consumeRecorder(record);
                 sleep();
             }

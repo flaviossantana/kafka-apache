@@ -2,6 +2,7 @@ package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
 import br.com.kafka.client.ProducerClient;
+import br.com.kafka.dto.Message;
 import br.com.kafka.dto.User;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -35,12 +36,14 @@ public class BatchSendMessageService implements Closeable {
         }
     }
 
-    private void consumer(ConsumerRecord<String, String> record) {
+    private void consumer(ConsumerRecord<String, Message<String>> record) {
         try {
 
+            Message<String> message = record.value();
             for (User user : getAllUsers()) {
-                reportUserProducer.send(record.value(), user.getUuid(), user);
+                reportUserProducer.send(message.getPayload(), user.getUuid(), user);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
