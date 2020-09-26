@@ -23,8 +23,7 @@ public class FraudDetectorService {
         try (ConsumerClient<Order> consumerClient = new ConsumerClient<>(
                 STORE_NEW_ORDER,
                 FraudDetectorService.class,
-                fraudDetectorService::print,
-                Order.class)) {
+                fraudDetectorService::print)) {
             consumerClient.run();
         }
 

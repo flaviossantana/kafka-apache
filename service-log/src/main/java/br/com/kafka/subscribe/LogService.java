@@ -25,7 +25,6 @@ public class LogService {
                 Pattern.compile(STORE_ALL_TOPICS),
                 LogService.class,
                 logService::printLog,
-                String.class,
                 properties)) {
             consumerClient.run();
         }

@@ -31,8 +31,7 @@ public class BatchSendMessageService implements Closeable {
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_SEND_MESSAGE_TO_ALL_USERS,
                 BatchSendMessageService.class,
-                batchSendMessageService::consumer,
-                String.class)) {
+                batchSendMessageService::consumer)) {
             consumerClient.run();
         }
     }

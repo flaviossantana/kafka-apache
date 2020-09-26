@@ -13,8 +13,8 @@ public class EmailService {
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_SEND_EMAIL,
                 EmailService.class,
-                emailService::printEmail,
-                String.class)) {
+                emailService::printEmail
+        )) {
             consumerClient.run();
         }
     }

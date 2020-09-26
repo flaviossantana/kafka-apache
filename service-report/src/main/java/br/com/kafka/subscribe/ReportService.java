@@ -21,8 +21,7 @@ public class ReportService {
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_REPORT_USER,
                 ReportService.class,
-                emailService::print,
-                User.class)) {
+                emailService::print)) {
             consumerClient.run();
         }
     }

@@ -21,25 +21,23 @@ import static br.com.kafka.constants.ServerConfig.IP_PORT;
 
 public class ConsumerClient<T> implements Closeable {
 
-    private Class<T> type;
     private ReadRecorder readRecorder;
     private KafkaConsumer<String, Message<T>> consumer;
     private Map<String, String> mapProperties;
 
-    private ConsumerClient(String groupId, ReadRecorder readRecorder, Class<T> type, Map<String, String> mapProperties) {
-        this.type = type;
+    private ConsumerClient(String groupId, ReadRecorder readRecorder, Map<String, String> mapProperties) {
         this.mapProperties = mapProperties;
         this.consumer = new KafkaConsumer(properties(groupId));
         this.readRecorder = readRecorder;
     }
 
-    public ConsumerClient(String topic, Class<?> aClass, ReadRecorder<T> readRecorder, Class<T> type) {
-        this(aClass.getSimpleName(), readRecorder,type, new HashMap<>());
+    public ConsumerClient(String topic, Class<?> aClass, ReadRecorder<T> readRecorder) {
+        this(aClass.getSimpleName(), readRecorder, new HashMap<>());
         this.consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public ConsumerClient(Pattern pattern, Class<?> aClass, ReadRecorder<T> readRecorder, Class<T> type, Map<String, String> mapProperties) {
-        this(aClass.getSimpleName(), readRecorder, type, mapProperties);
+    public ConsumerClient(Pattern pattern, Class<?> aClass, ReadRecorder<T> readRecorder, Map<String, String> mapProperties) {
+        this(aClass.getSimpleName(), readRecorder, mapProperties);
         this.consumer.subscribe(pattern);
     }
 

@@ -14,12 +14,14 @@ Teste de Integração com Java / Apache Kafka
 <br><i> .\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092</i>  
 
 - Descrever Tópicos
+<br><i> .\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe</i>
 <br><i> .\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic NOME_TPIC</i>
 
 - Alterando Tópico (Partitions):
 <br><i> .\bin\windows\kafka-topics.bat --alter --zookeeper localhost:2181 --topic NOME_TOPICO --partitions 3</i>
 
 - Descrevendo as Informaçoes dos Grupos:
+<br><i>.\bin\windows\kafka-consumer-groups.bat --all-groups --bootstrap-server localhost:9092 --describe</i>
 <br><i>.\bin\windows\kafka-consumer-groups.bat --group FraudDetectorService  --bootstrap-server localhost:9092 --describe</i>
 
     |GROUP                |TOPIC           |PARTITION  |CURRENT-OFFSET  |LOG-END-OFFSET  |LAG             |CONSUMER-ID     |HOST            |CLIENT-ID|
@@ -44,3 +46,7 @@ Teste de Integração com Java / Apache Kafka
  - como implementar um correlation id
  - a importância da mensagem como wrapper ou headers
  - como manter o histórico de mensagens que geraram uma determinada mensagem
+ - revisando tópicos e partições
+ - revisando consumer groups
+ - revisando líderes e réplicas
+ - revisando rebalanceamento

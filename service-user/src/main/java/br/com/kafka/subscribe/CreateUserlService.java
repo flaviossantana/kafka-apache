@@ -25,8 +25,7 @@ public class CreateUserlService {
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_NEW_ORDER,
                 CreateUserlService.class,
-                createUserService::consumeOrder,
-                Order.class)) {
+                createUserService::consumeOrder)) {
             consumerClient.run();
         }
     }
