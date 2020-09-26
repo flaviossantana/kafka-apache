@@ -12,6 +12,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import static br.com.kafka.constants.ServerConfig.IP_PORT;
 
@@ -23,10 +24,14 @@ public class ProducerClient<T> implements Closeable {
         this.producer = new KafkaProducer(properties());
     }
 
-    public void send(CorrelationId correlationId, String topic, String key, T payload) throws InterruptedException, ExecutionException {
+    public Future sendAsyc(CorrelationId correlationId, String topic, String key, T payload) throws InterruptedException, ExecutionException {
         Message<T> value = new Message<>(correlationId, payload);
         ProducerRecord record = new ProducerRecord(topic, key, value);
-        this.producer.send(record, senderCallback()).get();
+        return this.producer.send(record, senderCallback());
+    }
+
+    public void send(CorrelationId correlationId, String topic, String key, T payload) throws InterruptedException, ExecutionException {
+        this.sendAsyc(correlationId, topic, key, payload).get();
     }
 
     private Properties properties() {
