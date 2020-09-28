@@ -4,11 +4,13 @@ import br.com.kafka.client.ConsumerClient;
 import br.com.kafka.dto.Message;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.util.concurrent.ExecutionException;
+
 import static br.com.kafka.constants.TopicConfig.STORE_SEND_EMAIL;
 
 public class EmailService {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         EmailService emailService = new EmailService();
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_SEND_EMAIL,

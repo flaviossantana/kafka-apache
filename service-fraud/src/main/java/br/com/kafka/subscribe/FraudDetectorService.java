@@ -17,7 +17,7 @@ public class FraudDetectorService {
 
     private final ProducerClient emailProducer = new ProducerClient<Order>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         FraudDetectorService fraudDetectorService = new FraudDetectorService();
         try (ConsumerClient<Order> consumerClient = new ConsumerClient<>(

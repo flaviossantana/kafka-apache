@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.constants.TopicConfig.STORE_REPORT_USER;
 
@@ -16,7 +17,7 @@ public class ReportService {
 
     private static final InputStream IN = IO.getResourceAsStream("report_user.txt");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         ReportService emailService = new ReportService();
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_REPORT_USER,

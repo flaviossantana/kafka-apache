@@ -1,12 +1,17 @@
 package br.com.kafka.client;
 
 import br.com.kafka.behavior.ReadRecorder;
+import br.com.kafka.constants.TopicConfig;
+import br.com.kafka.dto.CorrelationId;
 import br.com.kafka.dto.Message;
 import br.com.kafka.serialization.GsonDeserializer;
+import br.com.kafka.serialization.GsonSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.io.Closeable;
@@ -15,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import static br.com.kafka.constants.ServerConfig.IP_PORT;
@@ -25,26 +31,11 @@ public class ConsumerClient<T> implements Closeable {
     private KafkaConsumer<String, Message<T>> consumer;
     private Map<String, String> mapProperties;
 
+
     private ConsumerClient(String groupId, ReadRecorder readRecorder, Map<String, String> mapProperties) {
         this.mapProperties = mapProperties;
         this.consumer = new KafkaConsumer(properties(groupId));
         this.readRecorder = readRecorder;
-    }
-
-    public ConsumerClient(String topic, Class<?> aClass, ReadRecorder<T> readRecorder) {
-        this(aClass.getSimpleName(), readRecorder, new HashMap<>());
-        this.consumer.subscribe(Collections.singletonList(topic));
-    }
-
-    public ConsumerClient(Pattern pattern, Class<?> aClass, ReadRecorder<T> readRecorder, Map<String, String> mapProperties) {
-        this(aClass.getSimpleName(), readRecorder, mapProperties);
-        this.consumer.subscribe(pattern);
-    }
-
-    public void run(){
-        while (true){
-            processorRecord(consumer.poll(Duration.ofMillis(100)));
-        }
     }
 
     private Properties properties(String groupIdConfig) {
@@ -58,20 +49,44 @@ public class ConsumerClient<T> implements Closeable {
         return properties;
     }
 
-    private void processorRecord(ConsumerRecords<String, Message<T>> records) {
-        if (!records.isEmpty()) {
-            for (ConsumerRecord<String, Message<T>> record : records) {
-                this.readRecorder.consumeRecorder(record);
-                sleep();
-            }
+    public ConsumerClient(String topic, Class<?> aClass, ReadRecorder<T> readRecorder) {
+        this(aClass.getSimpleName(), readRecorder, new HashMap<>());
+        this.consumer.subscribe(Collections.singletonList(topic));
+    }
+
+    public ConsumerClient(Pattern pattern, Class<?> aClass, ReadRecorder<T> readRecorder, Map<String, String> mapProperties) {
+        this(aClass.getSimpleName(), readRecorder, mapProperties);
+        this.consumer.subscribe(pattern);
+    }
+
+    public void run() throws ExecutionException, InterruptedException {
+        while (true) {
+            processorRecord(consumer.poll(Duration.ofMillis(100)));
         }
     }
 
-    private void sleep() {
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void processorRecord(ConsumerRecords<String, Message<T>> records) throws ExecutionException, InterruptedException {
+
+
+        if (!records.isEmpty()) {
+            for (ConsumerRecord<String, Message<T>> record : records) {
+                Message<T> message = record.value();
+                try {
+                    this.readRecorder.consumeRecorder(record);
+                    Thread.sleep(250);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    try (ProducerClient producerClient = new ProducerClient<>()) {
+                        producerClient.send(
+                                message.getCorrelation().addParent("DeadLetter"),
+                                TopicConfig.STORE_DEAD_LETTER,
+                                message.getCorrelation().getId(),
+                                new GsonSerializer<>().serialize("", message)
+                        );
+                    }
+                }
+
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import static br.com.kafka.constants.TopicConfig.STORE_ALL_TOPICS;
@@ -14,7 +15,7 @@ import static java.lang.System.out;
 
 public class LogService {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         LogService logService = new LogService();
 

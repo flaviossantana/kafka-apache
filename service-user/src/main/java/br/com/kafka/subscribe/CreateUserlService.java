@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.*;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.constants.DBConfig.*;
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
@@ -20,7 +21,7 @@ public class CreateUserlService {
         this.connection.createStatement().execute(CREATE_TB_USERS);
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ExecutionException, InterruptedException {
         CreateUserlService createUserService = new CreateUserlService();
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_NEW_ORDER,

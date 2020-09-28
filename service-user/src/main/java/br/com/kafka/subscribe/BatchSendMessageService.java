@@ -26,7 +26,7 @@ public class BatchSendMessageService implements Closeable {
         this.connection.createStatement().execute(CREATE_TB_USERS);
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ExecutionException, InterruptedException {
         BatchSendMessageService batchSendMessageService = new BatchSendMessageService();
         try (ConsumerClient consumerClient = new ConsumerClient<>(
                 STORE_SEND_MESSAGE_TO_ALL_USERS,

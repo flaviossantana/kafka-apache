@@ -17,6 +17,10 @@ public class CorrelationId {
                 '}';
     }
 
+    public String getId() {
+        return id;
+    }
+
     public CorrelationId addParent(String className) {
         return new CorrelationId(id +"|"+ className);
     }
