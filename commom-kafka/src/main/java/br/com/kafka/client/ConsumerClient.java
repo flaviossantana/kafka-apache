@@ -70,13 +70,13 @@ public class ConsumerClient<T> implements Closeable {
 
         if (!records.isEmpty()) {
             for (ConsumerRecord<String, Message<T>> record : records) {
-                Message<T> message = record.value();
                 try {
                     this.readRecorder.consumeRecorder(record);
                     Thread.sleep(250);
                 } catch (Exception e) {
                     e.printStackTrace();
                     try (ProducerClient producerClient = new ProducerClient<>()) {
+                        Message<T> message = record.value();
                         producerClient.send(
                                 message.getCorrelation().addParent("DeadLetter"),
                                 TopicConfig.STORE_DEAD_LETTER,

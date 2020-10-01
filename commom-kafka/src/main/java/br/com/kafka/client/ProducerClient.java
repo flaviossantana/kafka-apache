@@ -31,7 +31,7 @@ public class ProducerClient<T> implements Closeable {
     }
 
     public void send(CorrelationId correlationId, String topic, String key, T payload) throws InterruptedException, ExecutionException {
-        this.sendAsyc(correlationId, topic, key, payload).get();
+        this.sendAsyc(correlationId.addParent(">" + topic + "<"), topic, key, payload).get();
     }
 
     private Properties properties() {
