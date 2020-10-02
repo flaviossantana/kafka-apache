@@ -13,24 +13,18 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
-import static br.com.kafka.constants.TopicConfig.STORE_SEND_EMAIL;
 
 
 public class NewOrderServlet extends HttpServlet {
 
-    private final ProducerClient<Order> orderProducer = new ProducerClient<>();
-    private final ProducerClient<String> emailProducer = new ProducerClient<>();
-
     @Override
     public void destroy() {
         super.destroy();
-        orderProducer.close();
-        emailProducer.close();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-        try {
+        try (ProducerClient<Order> orderProducer = new ProducerClient<>()) {
 
             String email = req.getParameter("email");
             BigDecimal amount = new BigDecimal(req.getParameter("amount"));
@@ -40,13 +34,9 @@ public class NewOrderServlet extends HttpServlet {
 
             orderProducer.send(
                     new CorrelationId(NewOrderServlet.class.getSimpleName()),
-                    STORE_NEW_ORDER, email, order);
-
-            emailProducer.send(
-                    new CorrelationId(NewOrderServlet.class.getSimpleName()),
-                    STORE_SEND_EMAIL,
+                    STORE_NEW_ORDER,
                     email,
-                    msg);
+                    order);
 
             resp.getWriter().print(msg);
             resp.setStatus(HttpStatus.OK_200);
@@ -58,7 +48,5 @@ public class NewOrderServlet extends HttpServlet {
                     "Email: " + req.getParameter("email") +
                             "/ Amount: " + req.getParameter("amount"), e);
         }
-
-
     }
 }
