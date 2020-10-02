@@ -22,7 +22,7 @@ public class EmailService {
     }
 
     private void printEmail(ConsumerRecord<String, Message<String>> record) {
-        System.out.println("----------------------------------------------------");
+         System.out.println("----------------------------------------------------");
         System.out.println("SEND EMAIL FOR NEW ORDER");
         System.out.println("KEY:" + record.key());
         System.out.println(record.value());

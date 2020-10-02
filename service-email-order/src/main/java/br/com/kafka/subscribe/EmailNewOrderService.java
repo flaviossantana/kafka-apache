@@ -35,7 +35,7 @@ public class EmailNewOrderService {
         out.println("KEY: " + record.key());
         out.println(record.value());
 
-        String emailBody = "Thank you for your order! \n We are processing your order!";
+        String emailBody = "Thank you for your order! We are processing your order!";
         Order order = record.value().getPayload();
 
         producerClient.send(
