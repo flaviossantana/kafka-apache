@@ -24,10 +24,11 @@ public class ProducerClient<T> implements Closeable {
         this.producer = new KafkaProducer(properties());
     }
 
-    public Future sendAsyc(CorrelationId correlationId, String topic, String key, T payload) throws InterruptedException, ExecutionException {
+    public Future sendAsyc(CorrelationId correlationId, String topic, String key, T payload) {
         Message<T> value = new Message<>(correlationId, payload);
-        ProducerRecord record = new ProducerRecord(topic, key, value);
-        return this.producer.send(record, senderCallback());
+        return this.producer.send(
+                new ProducerRecord(topic, key, value),
+                senderCallback());
     }
 
     public void send(CorrelationId correlationId, String topic, String key, T payload) throws InterruptedException, ExecutionException {
