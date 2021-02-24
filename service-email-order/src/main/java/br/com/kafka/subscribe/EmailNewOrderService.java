@@ -12,22 +12,23 @@ import java.util.concurrent.ExecutionException;
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
 import static br.com.kafka.constants.TopicConfig.STORE_SEND_EMAIL;
 
-public class EmailNewOrderService {
+public class EmailNewOrderService implements ConsumerService<String> {
 
     ProducerClient<String> producerClient = new ProducerClient<>();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-
-        EmailNewOrderService emailNewOrderService = new EmailNewOrderService();
-        try (ConsumerClient<Order> consumerClient = new ConsumerClient<>(
-                STORE_NEW_ORDER,
-                EmailNewOrderService.class,
-                emailNewOrderService::printLog)) {
-            consumerClient.run();
-        }
+        new ServiceProvider().run(EmailNewOrderService::new);
     }
 
-    private void printLog(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
+    public String getTopic(){
+        return STORE_NEW_ORDER;
+    }
+
+    public Class<?> getConsumerGroup(){
+        return EmailNewOrderService.class;
+    }
+
+    public void parse(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
 
         System.out.println("----------------------------------------------------");
         System.out.println("###### PROCESSING NEW ORDER, PREPARING EMAIL #######");

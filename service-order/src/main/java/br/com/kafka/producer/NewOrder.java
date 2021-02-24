@@ -10,7 +10,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
-import static br.com.kafka.constants.TopicConfig.STORE_SEND_EMAIL;
 
 public class NewOrder {
 
@@ -19,7 +18,6 @@ public class NewOrder {
             for (int i = 0; i <= 100; i++) {
 
                 String email = GenereteData.email();
-
                 String orderId = UUID.randomUUID().toString();
                 BigDecimal amount = BigDecimal.valueOf(Math.random() * 5000 + 1);
 
@@ -34,7 +32,4 @@ public class NewOrder {
             }
         }
     }
-
-
-
 }
