@@ -16,7 +16,7 @@ public class NewOrder {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         try (ProducerClient orderProducer = new ProducerClient<Order>()) {
-            for (int i = 0; i <= 1000; i++) {
+            for (int i = 0; i <= 100; i++) {
 
                 String email = GenereteData.email();
 
