@@ -30,7 +30,7 @@ public class EmailNewOrderService implements ConsumerService<String> {
 
     public void parse(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
 
-        System.out.println("----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
         System.out.println("###### PROCESSING NEW ORDER, PREPARING EMAIL #######");
         System.out.println("LOGGING: " +  record.topic());
         System.out.println("KEY: " + record.key());
