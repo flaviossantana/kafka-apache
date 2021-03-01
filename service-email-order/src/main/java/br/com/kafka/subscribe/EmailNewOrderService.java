@@ -1,10 +1,9 @@
 package br.com.kafka.subscribe;
 
-import br.com.kafka.dto.Order;
-
-import br.com.kafka.client.ConsumerClient;
 import br.com.kafka.client.ProducerClient;
+import br.com.kafka.core.StoreLogger;
 import br.com.kafka.dto.Message;
+import br.com.kafka.dto.Order;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.concurrent.ExecutionException;
@@ -30,11 +29,11 @@ public class EmailNewOrderService implements ConsumerService<String> {
 
     public void parse(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
 
-        System.out.println("-----------------------------------------------------");
-        System.out.println("###### PROCESSING NEW ORDER, PREPARING EMAIL #######");
-        System.out.println("LOGGING: " +  record.topic());
-        System.out.println("KEY: " + record.key());
-        System.out.println(record.value());
+        StoreLogger.info("-----------------------------------------------------");
+        StoreLogger.info("###### PROCESSING NEW ORDER, PREPARING EMAIL ########");
+        StoreLogger.info("LOGGING: " +  record.topic());
+        StoreLogger.info("KEY: " + record.key());
+        StoreLogger.info(record.value());
 
         String emailBody = "Thank you for your order! We are processing your order!";
         Order order = record.value().getPayload();

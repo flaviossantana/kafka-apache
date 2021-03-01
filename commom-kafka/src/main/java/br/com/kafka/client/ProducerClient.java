@@ -1,5 +1,6 @@
 package br.com.kafka.client;
 
+import br.com.kafka.core.StoreLogger;
 import br.com.kafka.dto.CorrelationId;
 import br.com.kafka.dto.Message;
 import br.com.kafka.serialization.GsonSerializer;
@@ -50,7 +51,8 @@ public class ProducerClient<T> implements Closeable {
                 ex.printStackTrace();
                 return;
             }
-            System.out.println(
+
+            StoreLogger.severe(
                     "SENT SUCCESSFULY: " +
                             "TOPIC: " +
                             data.topic() + " | " +
