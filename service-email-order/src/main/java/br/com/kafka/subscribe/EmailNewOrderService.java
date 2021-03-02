@@ -15,8 +15,8 @@ public class EmailNewOrderService implements ConsumerService<String> {
 
     ProducerClient<String> producerClient = new ProducerClient<>();
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        new ServiceProvider().run(EmailNewOrderService::new);
+    public static void main(String[] args) {
+        new ServiceRunner(EmailNewOrderService::new).start(5);
     }
 
     public String getTopic(){
