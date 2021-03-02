@@ -1,36 +1,42 @@
 package br.com.kafka.subscribe;
 
-import br.com.kafka.client.ConsumerClient;
+import br.com.kafka.behavior.ConsumerService;
 import br.com.kafka.core.IO;
+import br.com.kafka.core.StoreLogger;
 import br.com.kafka.dto.Message;
 import br.com.kafka.dto.User;
+import br.com.kafka.service.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.constants.TopicConfig.STORE_REPORT_USER;
 
-public class ReportService {
+public class ReportService implements ConsumerService<User> {
 
     private static final InputStream IN = IO.getResourceAsStream("report_user.txt");
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ReportService emailService = new ReportService();
-        try (ConsumerClient consumerClient = new ConsumerClient<>(
-                STORE_REPORT_USER,
-                ReportService.class,
-                emailService::print)) {
-            consumerClient.run();
-        }
+    public static void main(String[] args) {
+        new ServiceRunner(ReportService::new).start(3);
     }
 
-    private void print(ConsumerRecord<String, Message<User>> record) {
+    @Override
+    public String getTopic() {
+        return STORE_REPORT_USER;
+    }
+
+    @Override
+    public Class<?> getConsumerGroup() {
+        return ReportService.class;
+    }
+
+    @Override
+    public void parse(ConsumerRecord<String, Message<User>> record) throws Exception {
         try {
-            System.out.println("---------------------------------------------------");
-            System.out.println("PROCESSING REPORT FOR: " + record.value().getPayload().getUuid());
+            StoreLogger.info("---------------------------------------------------");
+            StoreLogger.info("PROCESSING REPORT FOR: " + record.value().getPayload().getUuid());
 
             Message<User> message = record.value();
             User user = message.getPayload();
@@ -39,9 +45,7 @@ public class ReportService {
             IO.append(target, "Created for: " + user.getUuid());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            StoreLogger.severe(e);
         }
-
     }
-
 }

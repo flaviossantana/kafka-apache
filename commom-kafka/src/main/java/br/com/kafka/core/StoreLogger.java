@@ -22,4 +22,8 @@ public class StoreLogger {
         LOGGER.severe(msg);
     }
 
+    public static void severe(Object obj) {
+        LOGGER.severe(String.valueOf(obj));
+    }
+
 }

@@ -1,7 +1,8 @@
-package br.com.kafka.subscribe;
+package br.com.kafka.service;
 
+import br.com.kafka.behavior.ConsumerService;
+import br.com.kafka.behavior.ServiceFactory;
 import br.com.kafka.client.ConsumerClient;
-import br.com.kafka.dto.Order;
 
 import java.util.concurrent.Callable;
 
@@ -16,7 +17,7 @@ public class ServiceProvider<T> implements Callable<Void> {
     public Void call() throws Exception {
 
         ConsumerService<T> emailNewOrderService = factory.create();
-        try (ConsumerClient<Order> consumerClient = new ConsumerClient<>(
+        try (ConsumerClient<T> consumerClient = new ConsumerClient<>(
                 emailNewOrderService.getTopic(),
                 emailNewOrderService.getConsumerGroup(),
                 emailNewOrderService::parse)) {

@@ -1,4 +1,4 @@
-package br.com.kafka.subscribe;
+package br.com.kafka.behavior;
 
 public interface ServiceFactory<T>{
 

@@ -1,17 +1,17 @@
 package br.com.kafka.subscribe;
 
+import br.com.kafka.behavior.ConsumerService;
 import br.com.kafka.client.ProducerClient;
 import br.com.kafka.core.StoreLogger;
 import br.com.kafka.dto.Message;
 import br.com.kafka.dto.Order;
+import br.com.kafka.service.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-
-import java.util.concurrent.ExecutionException;
 
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
 import static br.com.kafka.constants.TopicConfig.STORE_SEND_EMAIL;
 
-public class EmailNewOrderService implements ConsumerService<String> {
+public class EmailNewOrderService implements ConsumerService<Order> {
 
     ProducerClient<String> producerClient = new ProducerClient<>();
 
@@ -27,7 +27,7 @@ public class EmailNewOrderService implements ConsumerService<String> {
         return EmailNewOrderService.class;
     }
 
-    public void parse(ConsumerRecord<String, Message<Order>> record) throws ExecutionException, InterruptedException {
+    public void parse(ConsumerRecord<String, Message<Order>> record) throws Exception {
 
         StoreLogger.info("-----------------------------------------------------");
         StoreLogger.info("###### PROCESSING NEW ORDER, PREPARING EMAIL ########");

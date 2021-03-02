@@ -1,4 +1,6 @@
-package br.com.kafka.subscribe;
+package br.com.kafka.service;
+
+import br.com.kafka.behavior.ServiceFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
