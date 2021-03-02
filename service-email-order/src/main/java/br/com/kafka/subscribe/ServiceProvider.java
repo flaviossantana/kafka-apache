@@ -9,7 +9,7 @@ public class ServiceProvider {
 
     public <T> void run(ServiceFactory<T> factory) throws ExecutionException, InterruptedException {
 
-        EmailNewOrderService emailNewOrderService = (EmailNewOrderService) factory.create();
+        ConsumerService emailNewOrderService = factory.create();
         try (ConsumerClient<Order> consumerClient = new ConsumerClient<>(
                 emailNewOrderService.getTopic(),
                 emailNewOrderService.getConsumerGroup(),
