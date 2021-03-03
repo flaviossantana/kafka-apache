@@ -54,3 +54,5 @@ Teste de Integração com Java / Apache Kafka
  - revisando líderes e réplicas
  - revisando rebalanceamento
  - como lidar com latest e earliest
+ - o problema de mensagens duplicadas
+ - como usar commit manual e configurar os dois lados para offsets manuais
