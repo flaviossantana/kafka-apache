@@ -53,3 +53,4 @@ Teste de Integração com Java / Apache Kafka
  - revisando consumer groups
  - revisando líderes e réplicas
  - revisando rebalanceamento
+ - como lidar com latest e earliest
