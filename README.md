@@ -17,6 +17,9 @@ Teste de Integração com Java / Apache Kafka
 <br><i> .\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe</i>
 <br><i> .\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic NOME_TPIC</i>
 
+- Listando Consumer Group
+<br><i> ./bin/kafka-consumer-groups.sh --all-groups --bootstrap-server localhost:9092 --describe</i>
+
 - Alterando Tópico (Partitions):
 <br><i> .\bin\windows\kafka-topics.bat --alter --zookeeper localhost:2181 --topic NOME_TOPICO --partitions 3</i>
 
