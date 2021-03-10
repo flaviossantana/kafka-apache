@@ -1,26 +1,26 @@
 package br.com.kafka.subscribe;
 
+import br.com.kafka.LocalDatabase;
 import br.com.kafka.behavior.ConsumerService;
+import br.com.kafka.constants.DBConfig;
 import br.com.kafka.core.StoreLogger;
 import br.com.kafka.dto.Message;
 import br.com.kafka.dto.Order;
 import br.com.kafka.service.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import java.sql.*;
-import java.util.Properties;
+import java.sql.SQLException;
 import java.util.UUID;
 
-import static br.com.kafka.constants.DBConfig.*;
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
 
 public class CreateUserlService implements ConsumerService<Order> {
 
-    private final Connection connection;
+    private final LocalDatabase localDatabase;
 
     public CreateUserlService() throws SQLException {
-        this.connection = DriverManager.getConnection(URL_DB, new Properties());
-        this.connection.createStatement().execute(CREATE_TB_USERS);
+        this.localDatabase = new LocalDatabase(DBConfig.URL_DB);
+        this.localDatabase.createTable(DBConfig.CREATE_TB_USERS);
     }
 
     public static void main(String[] args) {
@@ -63,20 +63,11 @@ public class CreateUserlService implements ConsumerService<Order> {
     }
 
     private void createUser(String email) throws SQLException {
-        try(PreparedStatement insert = this.connection.prepareStatement(INSERT_TB_USERS)){
-            insert.setString(1, UUID.randomUUID().toString());
-            insert.setString(2, email);
-            insert.execute();
-        }
+        this.localDatabase.update(DBConfig.INSERT_TB_USERS, UUID.randomUUID().toString(), email);
     }
 
     private boolean isNewuser(String email) throws SQLException {
-        try(PreparedStatement exists = this.connection.prepareStatement(SELECT_TB_USERS_BY_EMAIL)){
-            exists.setString(1, email);
-            try(ResultSet result = exists.executeQuery()){
-                return !result.next();
-            }
-        }
+        return this.localDatabase.insert(DBConfig.SELECT_TB_USERS_BY_EMAIL, email);
     }
 
 }

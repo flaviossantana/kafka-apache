@@ -18,6 +18,7 @@
         <module>service-ecommerce</module>
         <module>service-report</module>
         <module>service-email-order</module>
+        <module>common-database</module>
     </modules>
 
     <dependencies>
