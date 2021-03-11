@@ -19,6 +19,11 @@ public class LocalDatabase {
         this.preparedStatement(sql, params).execute();
     }
 
+    public ResultSet query(String sql, String... params) throws SQLException {
+        PreparedStatement preparedStatement = this.preparedStatement(sql, params);
+        return preparedStatement.getResultSet();
+    }
+
     public boolean insert(String sql, String... params) throws SQLException {
         PreparedStatement preparedStatement = this.preparedStatement(sql, params);
         try(ResultSet result = preparedStatement.executeQuery()){

@@ -2,6 +2,7 @@ package br.com.kafka.subscribe;
 
 import br.com.kafka.client.ConsumerClient;
 import br.com.kafka.client.ProducerClient;
+import br.com.kafka.constants.DBConfig;
 import br.com.kafka.core.StoreLogger;
 import br.com.kafka.dto.Message;
 import br.com.kafka.dto.User;
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-import static br.com.kafka.constants.DBConfig.*;
+import static br.com.kafka.constants.DBConfig.CREATE_TB_USERS;
+import static br.com.kafka.constants.DBConfig.SELECT_TB_USERS_ALL;
 import static br.com.kafka.constants.TopicConfig.STORE_SEND_MESSAGE_TO_ALL_USERS;
 
 public class BatchSendMessageService implements Closeable {
@@ -23,7 +25,7 @@ public class BatchSendMessageService implements Closeable {
     private final ProducerClient reportUserProducer = new ProducerClient<User>();
 
     public BatchSendMessageService() throws SQLException {
-        this.connection = DriverManager.getConnection(URL_DB, new Properties());
+        this.connection = DriverManager.getConnection(DBConfig.URL_DB_STORE, new Properties());
         this.connection.createStatement().execute(CREATE_TB_USERS);
     }
 

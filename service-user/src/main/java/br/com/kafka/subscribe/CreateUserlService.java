@@ -19,7 +19,7 @@ public class CreateUserlService implements ConsumerService<Order> {
     private final LocalDatabase localDatabase;
 
     public CreateUserlService() throws SQLException {
-        this.localDatabase = new LocalDatabase(DBConfig.URL_DB);
+        this.localDatabase = new LocalDatabase(DBConfig.URL_DB_STORE);
         this.localDatabase.createTable(DBConfig.CREATE_TB_USERS);
     }
 
