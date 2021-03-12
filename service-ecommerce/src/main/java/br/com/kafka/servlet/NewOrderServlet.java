@@ -1,6 +1,8 @@
 package br.com.kafka.servlet;
 
+import br.com.kafka.OrdersDatabase;
 import br.com.kafka.client.ProducerClient;
+import br.com.kafka.core.StoreLogger;
 import br.com.kafka.dto.CorrelationId;
 import br.com.kafka.dto.Order;
 import org.eclipse.jetty.http.HttpStatus;
@@ -28,20 +30,32 @@ public class NewOrderServlet extends HttpServlet {
 
             String email = req.getParameter("email");
             BigDecimal amount = new BigDecimal(req.getParameter("amount"));
-            Order order = new Order(UUID.randomUUID().toString(), email, amount);
+            String uuid = req.getParameter("uuid");
 
-            String msg = "Thanks " + email + ", for your purchase!";
+            Order order = new Order(uuid, email, amount);
 
-            orderProducer.send(
-                    new CorrelationId(NewOrderServlet.class.getSimpleName()),
-                    STORE_NEW_ORDER,
-                    email,
-                    order);
+            try(OrdersDatabase ordersDatabase = new OrdersDatabase()){
+                String msg = "Sorry " + email + ", old order. Try again!";
+                int httpStatus = HttpStatus.NO_CONTENT_204;
 
-            resp.getWriter().print(msg);
-            resp.setStatus(HttpStatus.OK_200);
+                if(ordersDatabase.save(order)){
+                    orderProducer.send(
+                            new CorrelationId(NewOrderServlet.class.getSimpleName()),
+                            STORE_NEW_ORDER,
+                            email,
+                            order);
 
-            System.out.println(msg);
+                    httpStatus = HttpStatus.OK_200;
+                    msg = "Thanks " + email + ", for your purchase!";
+                }
+
+                resp.getWriter().print(msg);
+                resp.setStatus(httpStatus);
+
+                StoreLogger.info(msg);
+            }
+
+
 
         } catch (Exception e) {
             throw new ServletException(

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
 
-import static br.com.kafka.constants.DBConfig.SELECT_TB_ORDER_FRAUDS_BY_ID;
+import static br.com.kafka.constants.DBConfig.SELECT_TB_FRAUDS_ORDER_BY_ID;
 import static br.com.kafka.constants.TopicConfig.STORE_NEW_ORDER;
 
 public class FraudDetectorService implements ConsumerService<Order> {
@@ -27,7 +27,7 @@ public class FraudDetectorService implements ConsumerService<Order> {
 
     public FraudDetectorService() throws SQLException {
         this.localDatabase = new LocalDatabase(DBConfig.URL_DB_FRAUDS);
-        this.localDatabase.createTable(DBConfig.CREATE_TB_ORDER_FRAUDS);
+        this.localDatabase.createTable(DBConfig.CREATE_TB_FRAUDS_ORDER);
     }
 
     public static void main(String[] args) {
@@ -59,7 +59,7 @@ public class FraudDetectorService implements ConsumerService<Order> {
 
             if (isRejected(order)) {
 
-                this.localDatabase.update(DBConfig.INSERT_TB_ORDER_FRAUDS, order.getId(), "true");
+                this.localDatabase.update(DBConfig.INSERT_TB_FRAUDS_ORDER, order.getId(), "true");
 
                 StoreLogger.info("PROCESSING ORDER REJECTED");
                 emailProducer.send(
@@ -69,7 +69,7 @@ public class FraudDetectorService implements ConsumerService<Order> {
                         order);
             } else {
 
-                this.localDatabase.update(DBConfig.INSERT_TB_ORDER_FRAUDS, order.getId(), "false");
+                this.localDatabase.update(DBConfig.INSERT_TB_FRAUDS_ORDER, order.getId(), "false");
 
                 StoreLogger.info("PROCESSING ORDER APROVED");
                 emailProducer.send(
@@ -90,7 +90,7 @@ public class FraudDetectorService implements ConsumerService<Order> {
     }
 
     private boolean isProcessed(Order order) throws SQLException {
-        return this.localDatabase.query(SELECT_TB_ORDER_FRAUDS_BY_ID, order.getId()).next();
+        return this.localDatabase.query(SELECT_TB_FRAUDS_ORDER_BY_ID, order.getId()).next();
     }
 
     private boolean isRejected(Order order) {

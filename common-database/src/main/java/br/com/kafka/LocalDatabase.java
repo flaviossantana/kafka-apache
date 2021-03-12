@@ -21,14 +21,13 @@ public class LocalDatabase {
 
     public ResultSet query(String sql, String... params) throws SQLException {
         PreparedStatement preparedStatement = this.preparedStatement(sql, params);
-        return preparedStatement.getResultSet();
+        return preparedStatement.executeQuery();
     }
 
-    public boolean insert(String sql, String... params) throws SQLException {
+    public void insert(String sql, String... params) throws SQLException {
         PreparedStatement preparedStatement = this.preparedStatement(sql, params);
-        try(ResultSet result = preparedStatement.executeQuery()){
-            return !result.next();
-        }
+        int i = preparedStatement.executeUpdate();
+        System.out.println(i);
     }
 
     private PreparedStatement preparedStatement(String sql, String... params) throws SQLException {
@@ -39,4 +38,7 @@ public class LocalDatabase {
         return preparedStatement;
     }
 
+    public void close() throws SQLException {
+        this.connection.close();
+    }
 }

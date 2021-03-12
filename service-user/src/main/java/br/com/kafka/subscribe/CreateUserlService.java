@@ -9,6 +9,7 @@ import br.com.kafka.dto.Order;
 import br.com.kafka.service.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ public class CreateUserlService implements ConsumerService<Order> {
             Message<Order> message = record.value();
             Order order = message.getPayload();
 
-            if (isNewuser(order.getEmail())) {
+            if (isNewUser(order.getEmail())) {
                 createUser(order.getEmail());
 
                 StoreLogger.info("----------------------------------------------------");
@@ -66,8 +67,16 @@ public class CreateUserlService implements ConsumerService<Order> {
         this.localDatabase.update(DBConfig.INSERT_TB_USERS, UUID.randomUUID().toString(), email);
     }
 
-    private boolean isNewuser(String email) throws SQLException {
-        return this.localDatabase.insert(DBConfig.SELECT_TB_USERS_BY_EMAIL, email);
+    private boolean isNewUser(String email) throws SQLException {
+
+        ResultSet query = this.localDatabase.query(DBConfig.SELECT_TB_USERS_BY_EMAIL, email);
+
+        if(query.next()){
+            return false;
+        }
+
+        this.localDatabase.insert(DBConfig.SELECT_TB_USERS_BY_EMAIL, email);
+        return true;
     }
 
 }

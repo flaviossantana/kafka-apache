@@ -14,6 +14,10 @@ public class Order {
         this.amount = amount;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
