@@ -61,3 +61,4 @@ Teste de Integração com Java / Apache Kafka
  - como extrair um módulo para banco de dados
  - idempotência e fast delegate
  - como lidar com idempotência em clientes externos
+ .
